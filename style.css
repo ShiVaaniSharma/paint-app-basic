@@ -1,0 +1,192 @@
+/* Define some variables for easier theming/consistency */
+:root {
+    --toolbar-bg: #f0f2f5; /* Lighter, cleaner toolbar */
+    --toolbar-border: #d9dcdf;
+    --button-bg: #ffffff;
+    --button-border: #d9dcdf;
+    --button-hover-bg: #eef2f7;
+    --button-active-bg: #d6eaff;
+    --button-active-border: #a6cfff;
+    --text-color: #333333;
+    --icon-color: #555555;
+    --canvas-bg: #ffffff;
+    --main-bg: #e8eaed; /* Slightly off-white page background */
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; /* Modern font stack */
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--main-bg);
+    color: var(--text-color);
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: var(--toolbar-bg);
+    border-bottom: 1px solid var(--toolbar-border);
+    flex-wrap: wrap;
+    gap: 6px; /* Slightly tighter gap */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    z-index: 10; /* Keep toolbar above canvas */
+}
+
+.tool-btn,
+.tool-label,
+input,
+select, /* Added select in case you add font dropdown later */
+#lineWidthValue,
+#fontSizeUnit {
+    margin: 0 2px;
+    vertical-align: middle;
+}
+
+.tool-btn {
+    background-color: var(--button-bg);
+    border: 1px solid var(--button-border);
+    border-radius: 6px; /* Slightly more rounded */
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px; /* Fixed width */
+    height: 38px;
+    color: var(--icon-color);
+    font-size: 16px;
+    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    text-decoration: none; /* For export link */
+}
+
+.tool-btn:hover {
+    background-color: var(--button-hover-bg);
+    border-color: #c5c9cf;
+}
+
+.tool-btn:active {
+     background-color: var(--button-active-bg);
+     border-color: var(--button-active-border);
+     box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.tool-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background-color: var(--button-bg); /* Prevent hover style on disabled */
+    border-color: var(--button-border);
+}
+
+.tool-btn.active-tool {
+    background-color: var(--button-active-bg);
+    border-color: var(--button-active-border);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    color: #0052cc; /* Highlight active icon color */
+}
+
+.tool-btn i {
+    pointer-events: none;
+}
+
+.tool-label {
+    font-size: 0.85em;
+    color: #666;
+    margin-left: 8px;
+}
+
+input[type="color"] {
+    border: 1px solid var(--button-border);
+    padding: 0;
+    height: 28px;
+    width: 38px;
+    cursor: pointer;
+    vertical-align: middle;
+    background-color: var(--button-bg);
+    border-radius: 4px;
+    box-sizing: border-box; /* Include border in size */
+    overflow: hidden; /* Clip swatch */
+}
+input[type="color"]::-webkit-color-swatch-wrapper { padding: 3px; }
+input[type="color"]::-webkit-color-swatch { border: none; border-radius: 3px; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);}
+input[type="color"]::-moz-color-swatch { border: none; border-radius: 3px; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);}
+
+
+input[type="range"] {
+    cursor: pointer;
+    vertical-align: middle;
+    width: 80px; /* Adjust as needed */
+}
+
+input[type="number"] {
+    border: 1px solid var(--button-border);
+    border-radius: 4px;
+    padding: 4px 6px;
+    height: 24px;
+    box-sizing: border-box;
+    width: 55px;
+}
+
+#lineWidthValue, #fontSizeUnit {
+    display: inline-block;
+    min-width: 22px;
+    text-align: right;
+    font-size: 0.85em;
+    color: #555;
+    margin-left: -2px; /* Align closer to slider */
+    margin-right: 4px;
+}
+#fontSizeUnit { margin-left: 2px; }
+
+
+.separator {
+    color: var(--toolbar-border);
+    margin: 0 6px;
+    font-size: 1.2em;
+    align-self: center; /* Align vertically */
+    height: 25px; /* Give it some height */
+    line-height: 25px; /* Center the pipe */
+}
+
+.canvas-container {
+    flex-grow: 1; /* Take remaining vertical space */
+    position: relative; /* Needed for absolute positioning of overlay */
+    width: 100%;
+    background-color: var(--canvas-bg);
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.08); /* Inner shadow for depth */
+    overflow: hidden; /* Ensure canvas doesn't overflow container */
+}
+
+#drawingCanvas, #overlayCanvas {
+    display: block; /* Remove extra space below canvas */
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* Dimensions set via JS */
+    width: 100%;
+    height: 100%;
+}
+
+#drawingCanvas {
+    z-index: 1; /* Main drawing canvas */
+    background-color: transparent; /* Let container bg show */
+}
+
+#overlayCanvas {
+    z-index: 2; /* Overlay for previews */
+    pointer-events: none; /* Allow clicks to pass through to main canvas by default */
+    background-color: transparent;
+}
+
+/* Cursors */
+.cursor-pen { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewport="0 0 20 20" style="fill:black;"><path d="M16.8,2.8l-1.2-1.2c-0.8-0.8-2-0.8-2.8,0L3.5,11.1c0,0-0.1,0-0.1,0.1l-2,6.1c-0.1,0.4,0.1,0.8,0.4,1.1C2,18.4,2.2,18.5,2.5,18.5c0.1,0,0.3,0,0.4-0.1l6.1-2c0,0,0.1,0,0.1-0.1l9.4-9.4C17.6,4.8,17.6,3.6,16.8,2.8z M4.7,13.5L13,5.2l1.8,1.8l-8.3,8.3L4.7,13.5z"/></svg>') 0 20, crosshair; }
+.cursor-highlighter { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23FFA500" opacity="0.6" d="M19 20H5V18H19V20M19 4V6H5V4H19M5 16H19V8H5V16Z"/></svg>') 12 12, crosshair; } /* Simple highlighter cursor */
+.cursor-eraser { cursor: cell; } /* Simple square-ish cursor for square eraser */
+.cursor-fill { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19.1 5.3C18.9 5.1 18.6 5 18.3 5c-.3 0-.5.1-.7.3L5.1 17.8c-.3.3-.4.7-.2 1.1l.8 1.9c.2.4.6.7 1.1.7h.1c.4 0 .8-.2 1.1-.5l12.5-12.5c.4-.4.5-.9.3-1.4l-.8-1.8zm-1 8.1l-1.7 1.7L15 13.7l1.7-1.7 1.4 1.4zM18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM7 19v-2h10v2H7z"/></svg>') 4 20, crosshair; } /* Paint bucket cursor */
+.cursor-crosshair { cursor: crosshair; }
+.cursor-text { cursor: text; }
+.cursor-select { cursor: move; } /* Or 'grab' */
+.cursor-select-pointer { cursor: pointer; } /* When hovering over an object */
+.cursor-default { cursor: default; }

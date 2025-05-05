@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InkCanvas Pro - Object Model + Fill</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="toolbar">
+        <!-- Tool Selection -->
+        <!-- <button class="tool-btn" data-tool="select" title="Select & Move (V)"><i class="fa-solid fa-arrow-pointer"></i></button> -->
+        <span class="separator">|</span>
+        <button class="tool-btn active-tool" data-tool="pen" title="Pen (P)"><i class="fa-solid fa-pencil"></i></button>
+        <button class="tool-btn" data-tool="highlighter" title="Highlighter (H)"><i class="fa-solid fa-highlighter"></i></button>
+        <button class="tool-btn" data-tool="eraser" title="Eraser (E)"><i class="fa-solid fa-eraser"></i></button>
+        <button class="tool-btn" data-tool="fill" title="Fill (Paint Bucket) (B)"><i class="fa-solid fa-fill-drip"></i></button>
+        <span class="separator">|</span>
+        <button class="tool-btn" data-tool="line" title="Line (L)"><i class="fa-solid fa-minus"></i></button>
+        <button class="tool-btn" data-tool="rectangle" title="Rectangle (R)"><i class="fa-regular fa-square"></i></button>
+        <button class="tool-btn" data-tool="circle" title="Circle (C)"><i class="fa-regular fa-circle"></i></button>
+        <button class="tool-btn" data-tool="text" title="Text (T)"><i class="fa-solid fa-font"></i></button>
+        <span class="separator">|</span>
+
+        <!-- Tool Options -->
+        <label for="colorPicker" class="tool-label">Color:</label>
+        <input type="color" id="colorPicker" value="#000000" title="Color Picker">
+
+        <label for="lineWidth" class="tool-label">Width:</label>
+        <input type="range" id="lineWidth" min="1" max="50" value="5" title="Line Width">
+        <span id="lineWidthValue">5</span>px
+
+        <label for="fontSize" class="tool-label" id="fontSizeLabel" style="display: none;">Size:</label>
+        <input type="number" id="fontSize" min="8" max="120" value="24" title="Font Size" style="display: none; width: 50px;">
+        <span id="fontSizeUnit" style="display: none;">px</span>
+
+        <span class="separator">|</span>
+
+        <!-- Actions -->
+        <button id="undoBtn" class="tool-btn" title="Undo (Ctrl+Z)"><i class="fa-solid fa-rotate-left"></i></button>
+        <button id="redoBtn" class="tool-btn" title="Redo (Ctrl+Y)"><i class="fa-solid fa-rotate-right"></i></button>
+        <button id="clearBtn" class="tool-btn" title="Clear Canvas"><i class="fa-solid fa-trash-can"></i></button>
+        <a id="exportBtn" class="tool-btn" download="inkcanvas-drawing.png" title="Export as PNG"><i class="fa-solid fa-download"></i></a>
+    </div>
+
+    <div class="canvas-container">
+        <!-- Main canvas for drawing and displaying objects -->
+        <canvas id="drawingCanvas"></canvas>
+        <!-- Overlay canvas for temporary previews (e.g., shapes) -->
+        <canvas id="overlayCanvas"></canvas>
+    </div>
+
+    <!-- Link to your JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>
